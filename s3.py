@@ -20,6 +20,8 @@ s3_client = session.client(
 )
 
 def upload_object(file_name, bucket, object_name=None):
+    if not bucket:
+        bucket = _AWS_BUCKET_NAME
     # Если S3 object_name не указан, то используется file_name
     if object_name is None:
         object_name = os.path.basename(file_name)
@@ -33,6 +35,8 @@ def upload_object(file_name, bucket, object_name=None):
     return True
 
 def save_object(file_path_save, bucket, object_name):
+    if not bucket:
+        bucket = _AWS_BUCKET_NAME
     # Запись объекта из хранилища в файл
     try:
         with open(file_path_save, 'wb') as f:
@@ -43,6 +47,8 @@ def save_object(file_path_save, bucket, object_name):
     return True
 
 def get_object(object_name, bucket):
+    if not bucket:
+        bucket = _AWS_BUCKET_NAME
     # Получение объекта из хранилища
     try:
         obj = s3_client.get_object(Bucket=bucket, Key=object_name)
