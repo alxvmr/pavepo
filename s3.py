@@ -19,12 +19,12 @@ s3_client = session.client(
     region_name = _AWS_DEFAULT_REGION
 )
 
-def upload_file(file_name, bucket, object_name=None):
+def upload_object(file_name, bucket, object_name=None):
     # Если S3 object_name не указан, то используется file_name
     if object_name is None:
         object_name = os.path.basename(file_name)
 
-    # Загрузка файла в облачное хранилище
+    # Загрузка объекта в облачное хранилище
     try:
         response = s3_client.upload_file(file_name, bucket, object_name)
     except ClientError as e:
@@ -32,8 +32,8 @@ def upload_file(file_name, bucket, object_name=None):
         return False
     return True
 
-def get_file(file_path_save, bucket, object_name):
-    # Запись файла из хранилища в файл
+def save_object(file_path_save, bucket, object_name):
+    # Запись объекта из хранилища в файл
     try:
         with open(file_path_save, 'wb') as f:
             s3_client.download_fileobj(bucket, object_name, f)
@@ -42,6 +42,16 @@ def get_file(file_path_save, bucket, object_name):
         return False
     return True
 
+def get_object(object_name, bucket):
+    # Получение объекта из хранилища
+    try:
+        obj = s3_client.get_object(Bucket=bucket, Key=object_name)
+    except Exception as e:
+        logging.error(e)
+        return False
+    return obj
+
 if __name__ == "__main__":
-    upload_file("C:/Users/alexe/Desktop/pavepo/temp/hello.txt", _AWS_BUCKET_NAME)
-    get_file("C:/Users/alexe/Desktop/pavepo/temp/hello_output.txt", _AWS_BUCKET_NAME, "hello.txt")
+    upload_object("C:/Users/alexe/Desktop/pavepo/temp/hello.txt", _AWS_BUCKET_NAME)
+    get_object("hello.txt", _AWS_BUCKET_NAME)
+    #get_file("C:/Users/alexe/Desktop/pavepo/temp/hello_output.txt", _AWS_BUCKET_NAME, "hello.txt")
