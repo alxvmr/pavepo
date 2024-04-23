@@ -36,7 +36,7 @@ def create_presigned_url(object_name, bucket_name=None, expiration=6000):
 
     return response
 
-def upload_object(file_name, bucket, object_name=None):
+def upload_object(file_name, bucket=None, object_name=None):
     if not bucket:
         bucket = _AWS_BUCKET_NAME
     # Если S3 object_name не указан, то используется file_name
