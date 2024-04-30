@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import os
 import logging
 from botocore.exceptions import ClientError
+import io
 load_dotenv()
 
 _AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
@@ -49,9 +50,9 @@ def upload_object(file_name, bucket=None, object_name=None):
     except ClientError as e:
         logging.error(e)
         return False
-    return True
+    return object_name
 
-def save_object(file_path_save, bucket, object_name):
+def save_object(file_path_save, object_name, bucket=None):
     if not bucket:
         bucket = _AWS_BUCKET_NAME
     # Запись объекта из хранилища в файл
@@ -75,6 +76,4 @@ def get_object(object_name, bucket=None):
     return obj
 
 if __name__ == "__main__":
-    upload_object("C:/Users/alexe/Desktop/pavepo/temp/vid2.mp4", _AWS_BUCKET_NAME)
-    #get_object("hello.txt", _AWS_BUCKET_NAME)
-    #get_file("C:/Users/alexe/Desktop/pavepo/temp/hello_output.txt", _AWS_BUCKET_NAME, "hello.txt")
+    upload_object("C:/Users/alexe/Desktop/pavepo/temp/vid2.mp4")
